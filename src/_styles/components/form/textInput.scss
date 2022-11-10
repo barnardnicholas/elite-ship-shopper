@@ -1,0 +1,29 @@
+.form-input,
+.form-textinput {
+  padding: 0.5rem 1rem;
+  line-height: 1.5rem;
+  color: var(--main-typography);
+  background-color: var(--main-background);
+  border: 1px solid var(--main-typography);
+  @include bodyText();
+  @include transitionColors();
+
+  &:disabled,
+  &.disabled {
+    cursor: not-allowed;
+    color: #666666;
+    border: 1px solid #666666;
+  }
+
+  &.error {
+    border-color: red;
+  }
+
+  // mini version
+  &.mini {
+    padding: {
+      top: 7px;
+      bottom: 7px;
+    }
+  }
+}

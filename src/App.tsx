@@ -1,13 +1,13 @@
-import React, { ChangeEvent, useEffect, useMemo } from 'react';
-import { atom, useAtom } from 'jotai';
+import React, { ChangeEvent, Suspense } from 'react';
 import './_styles/App.scss';
-import { modules } from './data/modules';
 import Button from './components/form/Button';
 import { EDDBModule } from './types/eddb';
-import { System } from './types/internal';
-
-const selectedModulesAtom = atom<number[]>([]);
-const searchTermAtom = atom<string>('');
+import { getNameFromModule } from './utils';
+import useSearch from './hooks/useSearch';
+import { FISystem, IStation, ISystem, Module } from './types/internal';
+import { searchTermAtom } from './atoms';
+import { useAtom } from 'jotai';
+import Divider from './components/Divider';
 
 const sampleResult = {
   '17072': {
@@ -49,8 +49,9 @@ const sampleResult = {
 };
 
 function App() {
-  const [selectedModules, setSelectedModules] = useAtom(selectedModulesAtom);
   const [searchTerm, setSearchTerm] = useAtom(searchTermAtom);
+  const { itinerary, search, modules, modulesToShow, selectedModules, setSelectedModules } =
+    useSearch();
 
   const handleClickModule = (id: number) => {
     if (selectedModules.includes(id))
@@ -58,77 +59,78 @@ function App() {
     else setSelectedModules([...selectedModules, id]);
   };
 
-  const modulesToShow = useMemo(() => {
-    return modules.filter((module: EDDBModule) => {
-      if (selectedModules.includes(module.id)) return false;
-      return `${module.class}${module.rating} ${module.group.name}`
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
-    });
-  }, [selectedModules, searchTerm]);
-
   return (
     <div className="App">
       <h1>SHIP SHOPPER</h1>
+      <Divider />
+      {!!itinerary && (
+        <>
+          <div style={{ padding: '1rem 0' }}>
+            <ol>
+              {itinerary.map((system: FISystem, i: number) => (
+                <li key={`${system.id}=${i}`}>
+                  <h4>{system.name}</h4>
+                  <ul>
+                    {system.stations.map((station: IStation) => (
+                      <li key={`${station.id}=${i}`}>
+                        <strong>{station.name}</strong>
+                        {station.modules_to_buy.map((module: Module) => {
+                          return <div key={module.id}>- {module.name}</div>;
+                        })}
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <Divider />
+        </>
+      )}
       <div style={{ padding: '1rem 0' }}>
         <h3>Selected Modules:</h3>
         {selectedModules.map((moduleID: number) => {
-          const thisModule = modules.find((module: EDDBModule) => module.id === moduleID);
-          const name = `${thisModule?.class}${thisModule?.rating} ${thisModule?.group?.name}`;
+          const thisModule = modules.find((module: Module) => module.id === moduleID);
           return (
             <Button key={moduleID} onClick={() => handleClickModule(moduleID)}>
-              {name}
+              {thisModule?.name}
             </Button>
           );
         })}
+        <div>
+          <Button onClick={search}>Search</Button>
+        </div>
       </div>
-      <div style={{ padding: '1rem 0' }}>{selectedModules.toString()}</div>
+      <Divider />
       <div style={{ padding: '1rem 0' }}>
         <h3>Choose Modules:</h3>
         <input
           type="text"
+          className="form-input text-input"
           value={searchTerm}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
         />
       </div>
       <div style={{ padding: '1rem 0' }}>
         <ul>
-          {modulesToShow.map((module: EDDBModule) => (
-            <Button key={module.id} onClick={() => handleClickModule(module.id)}>
-              {`${module.class}${module.rating} ${module.group.name}`}
+          {modulesToShow.map((module: Module, i: number) => (
+            <Button key={`${module.id}-${i}`} onClick={() => handleClickModule(module.id)}>
+              {module.name}
             </Button>
           ))}
         </ul>
       </div>
-      <div style={{ padding: '1rem 0' }}>
-        <ol>
-          {Object.values(sampleResult).map((system: any) => (
-            <li key={system.id}>
-              <h4>{system.name}</h4>
-              <ul>
-                {system.stations.map((station: any) => (
-                  <li key={station.id}>
-                    <strong>{station.name}</strong>
-                    {station.modules.map((moduleID: number) => {
-                      const thisModule = modules.find(
-                        (module: EDDBModule) => module.id === moduleID,
-                      );
-                      console.log(thisModule);
-                      return (
-                        <div key={moduleID}>
-                          - {`${thisModule?.class}${thisModule?.rating} ${thisModule?.group?.name}`}
-                        </div>
-                      );
-                    })}
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ol>
-      </div>
+      <Divider />
     </div>
   );
 }
 
-export default App;
+const AppContainer = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <App />
+    </Suspense>
+  );
+};
+
+export default AppContainer;

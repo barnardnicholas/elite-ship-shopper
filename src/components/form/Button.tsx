@@ -6,9 +6,11 @@ interface ButtonProps {
 }
 function Button({ onClick, children }: ButtonProps) {
   return (
-    <button type="button" className="button" onClick={onClick}>
-      {children}
-    </button>
+    <div className="button-wrapper">
+      <button type="button" className="button" onClick={onClick}>
+        {children}
+      </button>
+    </div>
   );
 }
 
