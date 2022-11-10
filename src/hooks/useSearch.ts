@@ -13,6 +13,7 @@ import outfittingStations from '../data/stations_with_outfitting.json';
 import populatedSystems from '../data/systems_populated.json';
 import {
   Coords,
+  FISystem,
   FItinerary,
   IStation,
   ISystem,
@@ -157,10 +158,12 @@ const useSearch = () => {
 
   const formattedItinerary: FItinerary | null = useMemo(() => {
     if (!itinerary) return null;
-    return Object.values(itinerary).map((system: ISystem) => ({
-      ...system,
-      stations: Object.values(system.stations),
-    }));
+    return Object.values(itinerary)
+      .map((system: ISystem) => ({
+        ...system,
+        stations: Object.values(system.stations),
+      }))
+      .sort((a: FISystem, b: FISystem) => a.distance - b.distance);
   }, [itinerary]);
 
   return {
