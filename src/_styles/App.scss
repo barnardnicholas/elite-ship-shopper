@@ -96,3 +96,21 @@ em,
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 }
+
+.search-form-container {
+  padding: 1rem 0;
+  display: flex;
+  justify-content: stretch;
+  align-items: flex-start;
+  flex-wrap: wrap;
+
+  .input-container {
+    // max-width: 20rem;
+    margin-right: 1rem;
+    flex: 1;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}

@@ -1,11 +1,12 @@
 import { useAtom } from 'jotai';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   itineraryAtom,
   rangeAtom,
   searchTermAtom,
   selectedModulesAtom,
   selectedShipAtom,
+  selectedSystemAtom,
   startCoordsAtom,
 } from '../atoms';
 import modules from '../data/modules.json';
@@ -20,8 +21,12 @@ import {
   Itinerary,
   Module,
   Station,
+  System,
 } from '../types/internal';
+import { DropdownOption } from '../types/DropdownOption';
 import { findSystemsInRange } from '../utils';
+
+import { ships } from '../constants/constants';
 
 export interface SearchBody {
   selectedModules: number[];
@@ -31,12 +36,18 @@ export interface SearchBody {
 }
 
 const useSearch = () => {
+  const [systemSearchTerm, setSystemSearchTerm] = useState<string>('');
   const [selectedModules, setSelectedModules] = useAtom(selectedModulesAtom);
   const [searchTerm] = useAtom(searchTermAtom);
   const [selectedShip, setSelectedShip] = useAtom(selectedShipAtom);
   const [range, setRange] = useAtom(rangeAtom);
-  const [startCoords, setStartCoords] = useAtom(startCoordsAtom);
+  const [selectedSystem, setSelectedSystem] = useAtom(selectedSystemAtom);
   const [itinerary, setItinerary] = useAtom(itineraryAtom);
+
+  const startCoords: Coords = !!selectedSystem
+    ? { x: selectedSystem.x, y: selectedSystem.y, z: selectedSystem.z }
+    : { x: 0, y: 0, z: 0 };
+  const selectedSystemID: number | null = !!selectedSystem ? selectedSystem.id : null;
 
   const modulesToShow = useMemo(() => {
     const filteredModules = modules.reduce((acc: Module[], curr: Module) => {
@@ -166,6 +177,27 @@ const useSearch = () => {
       .sort((a: FISystem, b: FISystem) => a.distance - b.distance);
   }, [itinerary]);
 
+  const shipOptions: DropdownOption<string>[] = ships.map((ship: string) => ({
+    label: ship,
+    value: ship,
+  }));
+
+  const getSystemOptions = () => {
+    if (systemSearchTerm.length < 3) return [{ label: 'Enter 2 charcters or more', value: 0 }];
+    const result = populatedSystems
+      .filter((system: System) =>
+        system.name.toLowerCase().trim().includes(systemSearchTerm.toLowerCase().trim()),
+      )
+      .map((system: System) => ({ label: system.name, value: system.id }));
+    console.log(result);
+    return result;
+  };
+
+  const handleSetSelectedSystem = (name: string, value: string | number | null) => {
+    const thisSystem = populatedSystems.find((system: System) => system.id === value);
+    if (thisSystem) setSelectedSystem(thisSystem);
+  };
+
   return {
     itinerary: formattedItinerary,
     search,
@@ -173,6 +205,10 @@ const useSearch = () => {
     modulesToShow: modulesToShow as Module[],
     selectedModules,
     setSelectedModules,
+    shipOptions,
+    systemOptions: getSystemOptions(),
+    selectedSystemID,
+    handleSetSelectedSystem,
   };
 };
 

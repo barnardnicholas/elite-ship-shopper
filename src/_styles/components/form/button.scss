@@ -2,6 +2,10 @@
   display: inline-block;
   padding-bottom: 5px;
   margin: 0.5em 0;
+
+  &.inline {
+    margin-right: 1rem;
+  }
 }
 .button {
   background-color: transparent;
