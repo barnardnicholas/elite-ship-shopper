@@ -23,8 +23,8 @@ function App() {
     selectedModules,
     setSelectedModules,
     shipOptions,
-    systemOptions,
-    selectedSystemID,
+    // systemOptions,
+    // selectedSystemID,
     handleSetSelectedSystem,
   } = useSearch();
 
@@ -44,14 +44,14 @@ function App() {
           <div style={{ padding: '1rem 0' }}>
             <ol>
               {itinerary.map((system: FISystem, i: number) => (
-                <li key={`${system.id}=${i}`} style={{ marginBottom: '1rem' }}>
+                <li key={`${system.id}-${i}`} style={{ marginBottom: '1rem' }}>
                   <h4>{system.name}</h4>
                   <ul>
-                    {system.stations.map((station: IStation) => (
-                      <li key={`${station.id}=${i}`}>
+                    {system.stations.map((station: IStation, j: number) => (
+                      <li key={`${station.id}-${j}`}>
                         <strong>{station.name}</strong>
                         {station.ships_to_buy.map((ship: string) => (
-                          <div key={ship}>{ship}</div>
+                          <div key={ship}>- {ship}</div>
                         ))}
                         {station.modules_to_buy.map((module: Module) => {
                           return <div key={module.id}>- {module.name}</div>;
@@ -86,11 +86,12 @@ function App() {
           <div style={{ display: 'inline-box', maxWidth: '15rem' }}>
             <Select
               name="selectedSystem"
-              value={selectedSystemID}
+              value={0}
               onChange={handleSetSelectedSystem}
-              options={systemOptions}
+              options={[]}
               search
-              placeholder={'None'}
+              placeholder="Sol"
+              disabled
             />
           </div>
         </div>

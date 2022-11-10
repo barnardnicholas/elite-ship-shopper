@@ -182,16 +182,19 @@ const useSearch = () => {
     value: ship,
   }));
 
-  const getSystemOptions = () => {
-    if (systemSearchTerm.length < 3) return [{ label: 'Enter 2 charcters or more', value: 0 }];
-    const result = populatedSystems
-      .filter((system: System) =>
-        system.name.toLowerCase().trim().includes(systemSearchTerm.toLowerCase().trim()),
-      )
-      .map((system: System) => ({ label: system.name, value: system.id }));
-    console.log(result);
-    return result;
-  };
+  // const getSystemOptions = () => {
+  //   // if (systemSearchTerm.length < 3) return [{ label: 'Enter 2 charcters or more', value: 0 }];
+  //   const result = populatedSystems
+  //     .filter((system: System) =>
+  //       system.name.toLowerCase().trim().includes(systemSearchTerm.toLowerCase().trim()),
+  //     )
+  //     .map((system: System) => ({ label: system.name, value: system.id }));
+  //   // const result = populatedSystems.map((system: System) => ({
+  //   //   label: system.name,
+  //   //   value: system.id,
+  //   // }));
+  //   return result;
+  // };
 
   const handleSetSelectedSystem = (name: string, value: string | number | null) => {
     const thisSystem = populatedSystems.find((system: System) => system.id === value);
@@ -206,7 +209,7 @@ const useSearch = () => {
     selectedModules,
     setSelectedModules,
     shipOptions,
-    systemOptions: getSystemOptions(),
+    // systemOptions: getSystemOptions(),
     selectedSystemID,
     handleSetSelectedSystem,
   };

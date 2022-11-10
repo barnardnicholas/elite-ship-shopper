@@ -1,46 +1,21 @@
-# Getting Started with Create React App
+# Elite Ship Shopper
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Find where to buy all modules for a ship build. Enter your start system (populated systems only for now), max range in lightyears (default 20), a ship if you don't already have it, and choose the modules you want to buy. Hit search to see an itinerary of systems & stations within range, with modules stocked for each one. Does not include planetary outposts.
 
-## Available Scripts
+## To use:
 
-In the project directory, you can run:
+- Clone the repository from Github
+- Navigate to project directory in terminal and run `npm install` to install packages
+- Fetch and process the data for the app by running `npm run fetch-process-data`
+- Start the app running locally by running `npm start`
+- Open a browser and navigate to http://localhost:3000 if necessary.
 
-### `npm start`
+## Notes:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- The app uses data from EDDB. The results gleaned from here are may not be 100% accurate due to the constraints of fetching the data.
+- The app only runs locally for now, using the instructions outlined above. I am working on hosting it.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Roadmap:
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- Hosting!
+- Import Coriolis builds!
