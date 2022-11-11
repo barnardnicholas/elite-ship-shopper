@@ -77,7 +77,24 @@ const processStations = () => {
   console.log('FINISHED');
 }; // Process Stations
 
+const combineData = () => {
+  const modulesRaw = fs.readFileSync(`${processedDataPath}/modules.json`);
+  const modules = JSON.parse(modulesRaw);
+  const stationsRaw = fs.readFileSync(`${processedDataPath}/stations_with_outfitting.json`);
+  const stations = JSON.parse(stationsRaw);
+  const systemsRaw = fs.readFileSync(`${processedDataPath}/systems_populated.json`);
+  const systems = JSON.parse(systemsRaw);
+  const data = {
+    modules,
+    stations,
+    systems,
+  };
+  fs.writeFileSync(`${processedDataPath}/all_data.json`, JSON.stringify(data));
+};
+
 processModules();
 processPopulatedSystems();
 processStations();
+combineData();
+
 /* eslint-enable */

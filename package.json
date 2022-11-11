@@ -25,7 +25,9 @@
     "eject": "react-scripts eject",
     "fetch-data": "node src/scripts/refetch-data.js",
     "process-data": "node src/scripts/process-data.js",
-    "fetch-process-data": "npm run fetch-data && npm run process-data"
+    "fetch-process-data": "npm run fetch-data && npm run process-data",
+    "deploy": "npm run fetch-process-data && npm run build && firebase deploy --only hosting",
+    "deploy:nofetch": "npm run build && firebase deploy --only hosting"
   },
   "eslintConfig": {
     "extends": [

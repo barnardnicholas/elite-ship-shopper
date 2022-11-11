@@ -70,6 +70,10 @@ em,
   @include transitionColors();
 }
 
+strong {
+  font-weight: 600;
+}
+
 /* ===== Scrollbar CSS ===== */
 /* Firefox */
 * {

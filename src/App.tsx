@@ -2,14 +2,13 @@ import React, { ChangeEvent, Suspense } from 'react';
 import './_styles/App.scss';
 import Button from './components/form/Button';
 import Select from './components/form/Select';
-import { EDDBModule } from './types/eddb';
-import { getNameFromModule } from './utils';
 import useSearch from './hooks/useSearch';
-import { FISystem, IStation, ISystem, Module } from './types/internal';
+import { FISystem, IStation, Module } from './types/internal';
 import { rangeAtom, searchTermAtom, selectedShipAtom } from './atoms';
 import { useAtom } from 'jotai';
 import Divider from './components/Divider';
 import TextInput from './components/form/TextInput';
+import axios from 'axios';
 
 function App() {
   const [searchTerm, setSearchTerm] = useAtom(searchTermAtom);
@@ -69,7 +68,7 @@ function App() {
       <div className="search-form-container">
         <div className="input-container">
           <h3>Selected Ship:</h3>
-          <div style={{ display: 'inline-box', maxWidth: '15rem' }}>
+          <div style={{ display: 'inline-box', maxWidth: '20rem' }}>
             <Select
               name="selectedShip"
               value={selectedShip}
@@ -79,6 +78,7 @@ function App() {
               options={shipOptions}
               placeholder={'None'}
             />
+            <div style={{ marginTop: '1rem' }}>(Leave empty if already owned)</div>
           </div>
         </div>
         <div className="input-container">
@@ -90,9 +90,10 @@ function App() {
               onChange={handleSetSelectedSystem}
               options={[]}
               search
-              placeholder="Sol"
+              placeholder="Sol (coming soon)"
               disabled
             />
+            <div style={{ marginTop: '1rem' }}>(Leave empty for Sol)</div>
           </div>
         </div>
         <div className="input-container">
@@ -110,6 +111,9 @@ function App() {
       </div>
       <div style={{ padding: '1rem 0' }}>
         <h3>Selected Modules:</h3>
+        {!selectedModules.length && (
+          <div style={{ padding: '1rem 0' }}>You haven&apos;t selected any modules yet.</div>
+        )}
         {selectedModules.map((moduleID: number) => {
           const thisModule = modules.find((module: Module) => module.id === moduleID);
           return (
@@ -119,7 +123,9 @@ function App() {
           );
         })}
         <div>
-          <Button onClick={search}>Search</Button>
+          <Button onClick={search} disabled={!selectedModules.length}>
+            Search
+          </Button>
         </div>
       </div>
       <Divider />

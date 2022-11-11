@@ -22,6 +22,12 @@
   border-bottom-width: 6px;
   margin-bottom: -5px;
   @include transitionColors();
+
+  &.disabled {
+    color: var(--main-border);
+    border-color: var(--main-border);
+    cursor: not-allowed;
+  }
 }
 .button:hover {
   background-color: var(--secondary-border);

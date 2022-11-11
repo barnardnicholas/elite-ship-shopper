@@ -33,7 +33,7 @@
   justify-content: space-between;
   align-items: center;
   cursor: default;
-  min-width: 15rem;
+  min-width: 20rem;
   @include bodyText();
 
   &:disabled,
@@ -120,7 +120,7 @@
 // select options & search
 .form-select-options {
   position: absolute;
-  min-width: 15rem;
+  min-width: 20rem;
   top: 100%;
   background-color: var(--main-background);
   border: 1px solid;
