@@ -9,9 +9,6 @@ import {
   selectedSystemAtom,
   startCoordsAtom,
 } from '../atoms';
-import modules from '../data/modules.json';
-import outfittingStations from '../data/stations_with_outfitting.json';
-import populatedSystems from '../data/systems_populated.json';
 import {
   Coords,
   FISystem,
@@ -27,6 +24,14 @@ import { DropdownOption } from '../types/DropdownOption';
 import { findSystemsInRange } from '../utils';
 
 import { ships } from '../constants/constants';
+import useModules from './useModules';
+import {
+  modulesAtom,
+  outfittingStationsAtom,
+  populatedSystemsAtom,
+} from '../services/firebase/firebaseAtoms';
+import usePopulatedSystems from './usePopulatedSystems';
+import useOutfittingStations from './useOutfittingStations';
 
 export interface SearchBody {
   selectedModules: number[];
@@ -36,6 +41,15 @@ export interface SearchBody {
 }
 
 const useSearch = () => {
+  useModules();
+  const [modules] = useAtom(modulesAtom);
+
+  usePopulatedSystems();
+  const [populatedSystems] = useAtom(populatedSystemsAtom);
+
+  useOutfittingStations();
+  const [outfittingStations] = useAtom(outfittingStationsAtom);
+
   const [systemSearchTerm, setSystemSearchTerm] = useState<string>('');
   const [selectedModules, setSelectedModules] = useAtom(selectedModulesAtom);
   const [searchTerm] = useAtom(searchTermAtom);
@@ -63,7 +77,7 @@ const useSearch = () => {
     });
 
     return filteredModulesToShow;
-  }, [selectedModules, searchTerm]);
+  }, [modules, selectedModules, searchTerm]);
 
   const search = () => {
     // Find systems in range

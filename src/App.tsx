@@ -8,12 +8,24 @@ import { rangeAtom, searchTermAtom, selectedShipAtom } from './atoms';
 import { useAtom } from 'jotai';
 import Divider from './components/Divider';
 import TextInput from './components/form/TextInput';
-import axios from 'axios';
+import {
+  isFetchingModulesAtom,
+  isFetchingOutfittingStationsAtom,
+  isFetchingPopulatedSystemsAtom,
+} from './services/firebase/firebaseAtoms';
 
 function App() {
   const [searchTerm, setSearchTerm] = useAtom(searchTermAtom);
   const [selectedShip, setSelectedShip] = useAtom(selectedShipAtom);
   const [range, setRange] = useAtom(rangeAtom);
+
+  const [isFetchingModules] = useAtom(isFetchingModulesAtom);
+  const [isFetchingOutfittingStations] = useAtom(isFetchingOutfittingStationsAtom);
+  const [isFetchingPopulatedSystems] = useAtom(isFetchingPopulatedSystemsAtom);
+
+  const isFetching =
+    isFetchingModules || isFetchingOutfittingStations || isFetchingPopulatedSystems;
+
   const {
     itinerary,
     search,
@@ -148,6 +160,7 @@ function App() {
         </ul>
       </div>
       <Divider />
+      {isFetching && <div className="loading-overlay">Loading...</div>}
     </div>
   );
 }

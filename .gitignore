@@ -24,3 +24,4 @@ yarn-error.log*
 
 src/data/**
 src/raw-data/**
+src/config/firebaseConfig.ts

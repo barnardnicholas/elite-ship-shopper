@@ -1,14 +1,18 @@
-export interface EDSMSystem {
-  distance: number;
+import { Coords } from './internal';
+
+export interface BaseEDSMSystem {
   name: string;
   id: number;
-  coords: {
-    x: number;
-    y: number;
-    z: number;
-  };
+  coords: Coords;
+  id64: number;
+  requirePermit: boolean;
 }
 
-export interface EDSMSystemWithID extends EDSMSystem {
-  id: number;
+export interface EDSMSystem {
+  coordsLocked: boolean;
+  permitName: string;
+}
+
+export interface EDSMSystemFromSphere extends BaseEDSMSystem {
+  distance: number;
 }
